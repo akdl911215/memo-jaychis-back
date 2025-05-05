@@ -6,11 +6,15 @@
  */
 
 plugins {
-    // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
-    alias(libs.plugins.kotlin.jvm)
+    // Spring Boot
+    id("org.springframework.boot") version "3.1.3"
+    id("io.spring.dependency-management") version "1.1.0"
 
-    // Apply the application plugin to add support for building a CLI application in Java.
-    application
+    // Kotlin
+    alias(libs.plugins.kotlin.jvm)
+    kotlin("plugin.spring") version "1.9.21"
+    kotlin("plugin.jpa")    version "1.9.21"
+    kotlin("kapt")           version "1.9.21"
 }
 
 repositories {
@@ -19,16 +23,17 @@ repositories {
 }
 
 dependencies {
-    // Use the Kotlin JUnit 5 integration.
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    // Swagger/OpenAPI
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
+    kapt         ("org.springdoc:springdoc-openapi-kotlin:2.1.0")
 
-    // Use the JUnit 5 integration.
-    testImplementation(libs.junit.jupiter.engine)
-
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-    // This dependency is used by the application.
+    // 기타
     implementation(libs.guava)
+
+    // 테스트
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation(libs.junit.jupiter.engine)
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

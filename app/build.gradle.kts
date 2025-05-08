@@ -6,26 +6,30 @@
  */
 
 plugins {
-    // Spring Boot
-    id("org.springframework.boot") version "3.1.3"
-    id("io.spring.dependency-management") version "1.1.0"
-
-    // Kotlin
-    alias(libs.plugins.kotlin.jvm)
-    kotlin("plugin.spring") version "1.9.21"
-    kotlin("plugin.jpa")    version "1.9.21"
-    kotlin("kapt")           version "1.9.21"
+  id("org.springframework.boot") version "3.1.3"
+  id("io.spring.dependency-management") version "1.1.0"
+  kotlin("jvm") version "1.9.21"
+  kotlin("plugin.jpa")    version "1.9.21"
+  kotlin("kapt")           version "1.9.21"
+  kotlin("plugin.spring") version "1.9.21"
 }
 
 repositories {
-    // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
 
 dependencies {
+    // Spring MVC & JSON support
+    implementation("org.springframework.boot:spring-boot-starter-web")
+
+    // Spring Data JPA
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+    // PostgreSQL driver
+    runtimeOnly("org.postgresql:postgresql:42.6.0")
+
     // Swagger/OpenAPI
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
-    kapt         ("org.springdoc:springdoc-openapi-kotlin:2.1.0")
 
     // 기타
     implementation(libs.guava)
@@ -44,8 +48,7 @@ java {
 }
 
 application {
-    // Define the main class for the application.
-    mainClass = "org.example.AppKt"
+  mainClass.set("com.jaychis.memo.MemoApplicationKt")
 }
 
 tasks.named<Test>("test") {

@@ -1,9 +1,9 @@
-@Service
-class MemoService(private val memoRepository: MemoRepository) {
+package com.jaychis.memo.service
 
-    fun createMemo(request: MemoRequest): Memo {
-        return memoRepository.save(Memo(content = request.content))
-    }
+import com.jaychis.memo.model.Memo
+import com.jaychis.memo.dto.MemoRequest
 
-    fun getAllMemos(): List<Memo> = memoRepository.findAll()
+interface MemoService {
+    fun createMemo(request: MemoRequest): Memo
+    fun getAllMemos(): List<Memo>
 }

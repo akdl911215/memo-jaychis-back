@@ -6,12 +6,12 @@
  */
 
 plugins {
-  id("org.springframework.boot") version "3.1.3"
-  id("io.spring.dependency-management") version "1.1.0"
-  kotlin("jvm") version "1.9.21"
-  kotlin("plugin.jpa")    version "1.9.21"
-  kotlin("kapt")           version "1.9.21"
-  kotlin("plugin.spring") version "1.9.21"
+  id("org.springframework.boot") version "3.2.3"
+  id("io.spring.dependency-management") version "1.1.4"
+  kotlin("jvm") version "1.9.22"
+  kotlin("plugin.jpa")    version "1.9.22"
+  kotlin("kapt")           version "1.9.22"
+  kotlin("plugin.spring") version "1.9.22"
 }
 
 repositories {
@@ -19,25 +19,30 @@ repositories {
 }
 
 dependencies {
-    // Spring MVC & JSON support
+   
     implementation("org.springframework.boot:spring-boot-starter-web")
-
-    // Spring Data JPA
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    runtimeOnly("org.postgresql:postgresql:42.7.2")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 
-    // PostgreSQL driver
-    runtimeOnly("org.postgresql:postgresql:42.6.0")
-
-    // Swagger/OpenAPI
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
+    // H2 데이터베이스
+    testRuntimeOnly("com.h2database:h2")
 
     // 기타
     implementation(libs.guava)
 
     // 테스트
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(module = "junit")
+        exclude(module = "mockito-core")
+    }
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
+    testImplementation("org.mockito:mockito-junit-jupiter:5.7.0")
+    testImplementation("org.mockito:mockito-core:5.7.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    testImplementation(libs.junit.jupiter.engine)
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -47,11 +52,7 @@ java {
     }
 }
 
-application {
-  mainClass.set("com.jaychis.memo.MemoApplicationKt")
-}
 
-tasks.named<Test>("test") {
-    // Use JUnit Platform for unit tests.
+tasks.withType<Test> {
     useJUnitPlatform()
 }

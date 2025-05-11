@@ -1,0 +1,1 @@
+INSERT INTO memos (content, created_at) VALUES ('테스트 메모 1', CURRENT_TIMESTAMP); 

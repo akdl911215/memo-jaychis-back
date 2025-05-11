@@ -11,11 +11,26 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "memos")
 data class Memo(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+        name = "UUID",
+        strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "id", columnDefinition = "uuid", updatable = false, nullable = false)
+    val id: UUID = UUID.randomUUID(),
 
-    @Column(nullable = false)
-    val content: String,
+    @Column(name = "draft_id", columnDefinition = "uuid", nullable = false, updatable = false)
+    val draftId: UUID = UUID.randomUUID(),
 
-    val createdAt: LocalDateTime = LocalDateTime.now()
+    @Column(columnDefinition = "TEXT", nullable = false)
+    var content: String,
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    var createdAt: LocalDateTime = LocalDateTime.now(),
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    var updatedAt: LocalDateTime? = null
 )

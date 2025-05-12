@@ -7,6 +7,10 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Column
 import java.time.LocalDateTime
+import java.util.UUID
+import org.hibernate.annotations.GenericGenerator
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
 
 @Entity
 @Table(name = "memos")

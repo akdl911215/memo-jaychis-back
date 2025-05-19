@@ -23,7 +23,11 @@ class MemoApiTest {
 
     @Test
     fun `메모 생성 테스트`() {
-        val request = MemoRequest("테스트 메모")
+        val id = UUID.randomUUID()
+        val request = MemoRequest(
+            draftId = id,
+            content = "테스트 메모"
+        )
         mockMvc.perform(
             post("/memos")
                 .contentType(MediaType.APPLICATION_JSON)

@@ -1,0 +1,167 @@
+name: Kotlin CI
+
+on:
+  push:
+    branches:
+      - stage
+      - prod
+  pull_request:
+    branches:
+      - stage
+      - prod
+
+permissions:
+  contents: write
+
+env:
+  DOCKER_IMAGE: ghcr.io/${{ github.actor }}/kotlin-app
+  VERSION: ${{ github.sha }}
+  AWSACCESSKEYID: ${{ secrets.AWSACCESSKEYID }}
+  AWSSECRETACCESSKEY: ${{ secrets.AWSSECRETACCESSKEY }}
+  AWSREGION: ${{ secrets.AWSREGION }}
+  S3BUCKETNAME: ${{ secrets.S3BUCKETNAME }}
+
+jobs:
+  build-stage:
+    if: github.ref == 'refs/heads/stage'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Grant execute permission for Gradle
+        run: chmod +x ./gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew clean build
+
+      - name: Build Docker image (stage)
+        run: |
+          docker build \
+            -f Dockerfile-stage \
+            --build-arg JAR_FILE="build/libs/*.jar" \
+            -t ${{ env.DOCKER_IMAGE }}:stage-${{ env.VERSION }} .
+
+      - name: Push to GHCR (stage)
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile-stage
+          push: true
+          tags: |
+            ${{ env.DOCKER_IMAGE }}:stage-latest
+            ${{ env.DOCKER_IMAGE }}:stage-${{ env.VERSION }}
+
+  deploy-stage:
+    if: github.ref == 'refs/heads/stage'
+    needs: build-stage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Docker network
+        run: docker network create connect-net || true # 기본 브리지 드라이버 사용 :contentReference[oaicite:0]{index=0}
+
+      - name: Run Postgres container
+        run: |
+          docker run -itd \
+            --network connect-net \
+            --name psql \
+            -p 5432:5432 \
+            -e POSTGRES_USER=postgres \
+            -e POSTGRES_PASSWORD=123456 \
+            -e POSTGRES_DB=postgres \
+            --restart always \
+            postgres                                 # 컨테이너 간 DNS 해석로 psql 호스트 사용 :contentReference[oaicite:1]{index=1}
+
+      - name: Pull and run Kotlin app (stage)
+        run: |
+          docker pull ${{ env.DOCKER_IMAGE }}:stage-latest
+          docker stop kotlin-app-stage || true
+          docker rm kotlin-app-stage || true
+          docker run -d \
+            --network connect-net \
+            -p 8080:8080 \
+            --name kotlin-app-stage \
+            -e AWSACCESSKEYID="${{ env.AWSACCESSKEYID }}" \
+            -e AWSSECRETACCESSKEY="${{ env.AWSSECRETACCESSKEY }}" \
+            -e AWSREGION="${{ env.AWSREGION }}" \
+            -e S3BUCKETNAME="${{ env.S3BUCKETNAME }}" \
+            ${{ env.DOCKER_IMAGE }}:stage-latest \
+            java -jar /app/app.jar
+
+  build-prod:
+    if: github.ref == 'refs/heads/prod'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Grant execute permission for Gradle
+        run: chmod +x ./gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew clean build
+
+      - name: Build Docker image (prod)
+        run: |
+          docker build \
+            -f Dockerfile-prod \
+            --build-arg JAR_FILE="build/libs/*.jar" \
+            -t ${{ env.DOCKER_IMAGE }}:prod-${{ env.VERSION }} .
+
+      - name: Push to GHCR (prod)
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile-prod
+          push: true
+          tags: |
+            ${{ env.DOCKER_IMAGE }}:prod-latest
+            ${{ env.DOCKER_IMAGE }}:prod-${{ env.VERSION }}
+
+  deploy-prod:
+    if: github.ref == 'refs/heads/prod'
+    needs: build-prod
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Docker network
+        run: docker network create connect-net || true
+
+      - name: Run Postgres container
+        run: |
+          docker run -itd \
+            --network connect-net \
+            --name psql \
+            -p 5432:5432 \
+            -e POSTGRES_USER=postgres \
+            -e POSTGRES_PASSWORD=123456 \
+            -e POSTGRES_DB=postgres \
+            --restart always \
+            postgres
+
+      - name: Pull and run Kotlin app (prod)
+        run: |
+          docker pull ${{ env.DOCKER_IMAGE }}:prod-latest
+          docker stop kotlin-app-prod || true
+          docker rm kotlin-app-prod || true
+          docker run -d \
+            --network connect-net \
+            -p 80:8080 \
+            --name kotlin-app-prod \
+            -e AWSACCESSKEYID="${{ env.AWSACCESSKEYID }}" \
+            -e AWSSECRETACCESSKEY="${{ env.AWSSECRETACCESSKEY }}" \
+            -e AWSREGION="${{ env.AWSREGION }}" \
+            -e S3BUCKETNAME="${{ env.S3BUCKETNAME }}" \
+            ${{ env.DOCKER_IMAGE }}:prod-latest \
+            java -jar /app/app.jar

@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.http.MediaType
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.jaychis.memo.dto.MemoRequest
+import java.util.UUID
 
 @SpringBootTest
 @AutoConfigureMockMvc

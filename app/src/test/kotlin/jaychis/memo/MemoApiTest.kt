@@ -15,6 +15,7 @@ import java.util.UUID
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 class MemoApiTest {
     @Autowired
     private lateinit var mockMvc: MockMvc

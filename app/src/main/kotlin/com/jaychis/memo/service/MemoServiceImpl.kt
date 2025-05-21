@@ -35,4 +35,6 @@ class MemoServiceImpl(private val memoRepository: MemoRepository) : MemoService 
         }
         
     }
-} 
+    
+    override fun getAllMemos(): List<Memo> = memoRepository.findAll()
+}

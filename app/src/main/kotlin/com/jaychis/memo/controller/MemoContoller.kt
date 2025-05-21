@@ -22,6 +22,15 @@ import java.util.UUID
 class MemoController(private val memoService: MemoService) {
 
     @Operation(
+        summary = "메모 목록 조회",
+        description = "모든 메모 목록을 반환합니다."
+    )
+    @ApiResponse(responseCode = "200", description = "요청 성공")
+    @GetMapping
+    fun getAllMemos(): ResponseEntity<List<Memo>> =
+        ResponseEntity.ok(memoService.getAllMemos())
+
+    @Operation(
         summary = "메모 내용 조회",
         description = "draftId에 해당하는 메모의 내용을 반환하고, 메모가 없으면 빈 문자열을 반환합니다."
     )

@@ -12,6 +12,7 @@ import org.springframework.http.MediaType
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.jaychis.memo.dto.MemoRequest
 import java.util.UUID
+import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @AutoConfigureMockMvc

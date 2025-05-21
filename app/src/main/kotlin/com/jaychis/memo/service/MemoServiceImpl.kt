@@ -6,6 +6,7 @@ import com.jaychis.memo.model.Memo
 import com.jaychis.memo.repository.MemoRepository
 import com.jaychis.memo.dto.MemoRequest
 import java.util.UUID
+import kotlin.collections.List
 import java.time.LocalDateTime
 
 @Service
@@ -35,6 +36,6 @@ class MemoServiceImpl(private val memoRepository: MemoRepository) : MemoService 
         }
         
     }
-    
+
     override fun getAllMemos(): List<Memo> = memoRepository.findAll()
 }

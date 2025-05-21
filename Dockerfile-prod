@@ -3,8 +3,7 @@ FROM eclipse-temurin:17-jre-alpine AS runtime
 WORKDIR /app
 
 # JAR 파일 복사 (GitHub Actions에서 빌드된 JAR 파일)
-ARG JAR_FILE
-COPY ${JAR_FILE} app.jar
+COPY app/build/libs/*.jar app.jar
 
 # 환경 변수 설정
 ENV SPRING_PROFILES_ACTIVE=prod

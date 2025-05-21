@@ -3,7 +3,7 @@ package com.jaychis.memo.service
 import com.jaychis.memo.model.Memo
 import com.jaychis.memo.dto.MemoRequest
 import java.util.UUID
-import java.util.List
+import kotlin.collections.List
 
 interface MemoService {
     fun getByDraftId(draftId: UUID): Memo?

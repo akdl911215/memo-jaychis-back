@@ -68,7 +68,7 @@ jobs:
   deploy-stage:
     if: github.ref == 'refs/heads/stage'
     needs: build-stage
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, label-stage]
     steps:
       - name: Create Docker network
         run: docker network create connect-net || true # 기본 브리지 드라이버 사용 :contentReference[oaicite:0]{index=0}
@@ -147,7 +147,7 @@ jobs:
   deploy-prod:
     if: github.ref == 'refs/heads/prod'
     needs: build-prod
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, label-prod]
     steps:
       - name: Create Docker network
         run: docker network create connect-net || true

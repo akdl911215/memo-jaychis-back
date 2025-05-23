@@ -11,15 +11,15 @@ on:
       - prod
 
 permissions:
+  actions: write
   contents: write
+  issues: none
+  pull-requests: write
+  packages: write
 
 env:
   DOCKER_IMAGE: ghcr.io/${{ github.actor }}/kotlin-app
   VERSION: ${{ github.sha }}
-  AWSACCESSKEYID: ${{ secrets.AWSACCESSKEYID }}
-  AWSSECRETACCESSKEY: ${{ secrets.AWSSECRETACCESSKEY }}
-  AWSREGION: ${{ secrets.AWSREGION }}
-  S3BUCKETNAME: ${{ secrets.S3BUCKETNAME }}
 
 jobs:
   build-stage:

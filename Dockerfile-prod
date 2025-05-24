@@ -10,8 +10,10 @@ ENV SPRING_PROFILES_ACTIVE=prod
 ENV SERVER_PORT=8080
 
 # 컨테이너 실행 시 비-루트 사용자로 실행
-RUN addgroup -S spring && adduser -S spring -G spring
-USER spring:spring
+RUN groupadd --system spring \
+    && useradd  --system --create-home --gid spring --home-dir /home/spring spring
+
+    USER spring:spring
 
 # 포트 노출
 EXPOSE 8080

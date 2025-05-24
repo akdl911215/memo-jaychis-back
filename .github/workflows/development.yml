@@ -95,6 +95,7 @@ jobs:
             --network connect-net \
             -p 8080:8080 \
             --name kotlin-app-stage \
+            -e SPRING_PROFILES_ACTIVE=stage \
             -e AWSACCESSKEYID="${{ env.AWSACCESSKEYID }}" \
             -e AWSSECRETACCESSKEY="${{ env.AWSSECRETACCESSKEY }}" \
             -e AWSREGION="${{ env.AWSREGION }}" \
@@ -175,6 +176,7 @@ jobs:
             --network connect-net \
             -p 80:8080 \
             --name kotlin-app-prod \
+            -e SPRING_PROFILES_ACTIVE=prod \
             -e AWSACCESSKEYID="${{ env.AWSACCESSKEYID }}" \
             -e AWSSECRETACCESSKEY="${{ env.AWSSECRETACCESSKEY }}" \
             -e AWSREGION="${{ env.AWSREGION }}" \

@@ -83,7 +83,8 @@ jobs:
             -e POSTGRES_PASSWORD=123456 \
             -e POSTGRES_DB=postgres \
             --restart always \
-            postgres   
+            postgres \
+          || true 
 
       - name: Pull and run Kotlin app (st                   age)
         run: |
@@ -162,7 +163,8 @@ jobs:
             -e POSTGRES_PASSWORD=123456 \
             -e POSTGRES_DB=postgres \
             --restart always \
-            postgres
+            postgres \
+          || true
 
       - name: Pull and run Kotlin app (prod)
         run: |

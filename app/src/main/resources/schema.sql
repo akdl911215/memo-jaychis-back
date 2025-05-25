@@ -2,7 +2,7 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 CREATE TABLE IF NOT EXISTS memos (
   id         UUID       PRIMARY KEY DEFAULT gen_random_uuid(),
-  draft_id   UUID       NOT NULL UNIQUE DEFAULT gen_random_uuid(),
+  draft_id   UUID       NOT NULL UNIQUE,
   content    TEXT       NOT NULL,
   created_at TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP

@@ -25,7 +25,7 @@ data class Memo(
     val id: UUID = UUID.randomUUID(),
 
     @Column(name = "draft_id", columnDefinition = "uuid", nullable = false, updatable = false)
-    val draftId: UUID = UUID.randomUUID(),
+    val draftId: UUID,
 
     @Column(columnDefinition = "TEXT", nullable = false)
     var content: String,

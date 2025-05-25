@@ -11,9 +11,29 @@ import java.time.LocalDateTime
 
 @Service
 class MemoServiceImpl(private val memoRepository: MemoRepository) : MemoService {
-    override fun getByDraftId(draftId: UUID): Memo? =
-     memoRepository.findByDraftId(draftId)
-    
+    override fun getByDraftId(draftId: UUID): String {
+        println("=== Start getByDraftId in Service ===")
+        try {
+            println("draftId: $draftId")
+            
+            val memo = memoRepository.findByDraftId(draftId)
+            println("Found memo: $memo")
+            
+            val result = memo?.content ?: ""
+            println("Returning content: $result")
+            
+            println("=== End getByDraftId in Service ===")
+            return result
+        } catch (e: Exception) {
+            println("=== Error in getByDraftId Service ===")
+            println("Error type: ${e.javaClass.name}")
+            println("Error message: ${e.message}")
+            e.printStackTrace()
+            println("=== End Error ===")
+            throw e  // 예외를 다시 던져서 컨트롤러에서 처리하도록 함
+        }
+    }
+        
     @Transactional
     override fun upsert(request: MemoRequest): Memo {
         

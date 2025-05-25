@@ -6,7 +6,7 @@ import java.util.UUID
 import kotlin.collections.List
 
 interface MemoService {
-    fun getByDraftId(draftId: UUID): Memo?
+    fun getByDraftId(draftId: UUID): String
     fun upsert(request: MemoRequest): Memo
     fun getAllMemos(): List<Memo>
 }

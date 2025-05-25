@@ -10,8 +10,8 @@ import java.time.LocalDateTime
 
 @Service
 class MemoServiceImpl(private val memoRepository: MemoRepository) : MemoService {
-    override fun getByDraftId(draftId: UUID): Memo? =
-     memoRepository.findByDraftId(draftId)
+    override fun getByDraftId(draftId: UUID): String =
+        memoRepository.findByDraftId(draftId)?.content ?: ""
     
     @Transactional
     override fun upsert(request: MemoRequest): Memo {

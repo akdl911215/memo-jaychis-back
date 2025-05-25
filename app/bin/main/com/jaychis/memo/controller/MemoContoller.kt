@@ -16,10 +16,20 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.Parameter
 import java.util.UUID
+import org.springframework.http.HttpStatus
 
 @RestController
 @RequestMapping("/memos")
 class MemoController(private val memoService: MemoService) {
+
+    @Operation(
+        summary = "메모 목록 조회",
+        description = "모든 메모 목록을 반환합니다."
+    )
+    @ApiResponse(responseCode = "200", description = "요청 성공")
+    @GetMapping
+    fun getAllMemos(): ResponseEntity<List<Memo>> =
+        ResponseEntity.ok(memoService.getAllMemos())
 
     @Operation(
         summary = "메모 내용 조회",
@@ -35,7 +45,7 @@ class MemoController(private val memoService: MemoService) {
         @Parameter(description = "조회할 메모의 draftId", required = true)
         @PathVariable draftId: UUID
     ): ResponseEntity<String> {
-        val content: String = memoService.getByDraftId(draftId)?.content ?: ""
+        val content: String = memoService.getByDraftId(draftId)
         return ResponseEntity.ok(content)
     }
 

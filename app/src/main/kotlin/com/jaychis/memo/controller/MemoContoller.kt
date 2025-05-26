@@ -44,7 +44,7 @@ class MemoController(private val memoService: MemoService) {
         @Parameter(description = "조회할 메모의 draftId", required = true)
         @PathVariable draftId: UUID
     ): ResponseEntity<String> {
-        val content: String = memoService.getByDraftId(draftId)?.content ?: ""
+        val content: String = memoService.getByDraftId(draftId)
         return ResponseEntity.ok(content)
     }
 

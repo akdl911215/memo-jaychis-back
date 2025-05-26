@@ -13,5 +13,4 @@ class WebConfig : WebMvcConfigurer {
             .allowedHeaders("*")
             .allowCredentials(true)
     }
-
 }

@@ -34,15 +34,18 @@ dependencies {
     implementation(libs.guava)
 
     // 테스트
-    testImplementation("org.springframework.boot:spring-boot-starter-test") {
-        exclude(module = "junit")
-        exclude(module = "mockito-core")
-    }
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    // testImplementation("org.springframework.boot:spring-boot-starter-test") {
+    //     exclude(module = "junit")
+    //     exclude(module = "mockito-core")
+    // }
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
     testImplementation("org.mockito:mockito-junit-jupiter:5.7.0")
     testImplementation("org.mockito:mockito-core:5.7.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+
+ 
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

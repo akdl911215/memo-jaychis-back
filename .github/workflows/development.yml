@@ -183,3 +183,4 @@ jobs:
             -e S3BUCKETNAME="${{ env.S3BUCKETNAME }}" \
             ${{ env.DOCKER_IMAGE }}:prod-latest \
             java -jar /app/app.jar
+            

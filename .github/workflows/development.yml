@@ -174,7 +174,7 @@ jobs:
           docker rm kotlin-app-prod || true
           docker run -d \
             --network connect-net \
-            -p 8080:8080 \
+            -p 80:8080 \
             --name kotlin-app-prod \
             -e SPRING_PROFILES_ACTIVE=prod \
             -e AWSACCESSKEYID="${{ env.AWSACCESSKEYID }}" \
@@ -183,4 +183,5 @@ jobs:
             -e S3BUCKETNAME="${{ env.S3BUCKETNAME }}" \
             ${{ env.DOCKER_IMAGE }}:prod-latest \
             java -jar /app/app.jar
+            
           

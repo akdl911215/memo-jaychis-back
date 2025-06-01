@@ -19,7 +19,7 @@ USER spring:spring
 # EXPOSE 8080
 # EXPOSE 80
 # EXPOSE 88
-EXPOSE 433
+EXPOSE 443
 
 # 애플리케이션 실행
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
